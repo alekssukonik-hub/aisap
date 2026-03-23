@@ -8,10 +8,16 @@ import type { StudyIndication, StudyStatus, StudySummary } from '@/types/Study';
 
 const pageSizeOptions = [10, 25, 50, 100] as const;
 type PageSize = (typeof pageSizeOptions)[number];
+const lvefFilterOptions = ['all', 'normal', 'midly', 'severly'] as const;
+type LvefFilter = (typeof lvefFilterOptions)[number];
 const studiesPaginationStorageKey = 'studies.pagination';
 
 function isPageSize(value: number): value is PageSize {
   return pageSizeOptions.includes(value as PageSize);
+}
+
+function isLvefFilter(value: string): value is LvefFilter {
+  return lvefFilterOptions.includes(value as LvefFilter);
 }
 
 function StudiesPageContent() {
@@ -30,19 +36,87 @@ function StudiesPageContent() {
   const [pageSize, setPageSize] = useState<PageSize>(10);
   const [page, setPage] = useState(1);
 
-  function syncPaginationToUrl(nextPage: number, nextPageSize: PageSize) {
-    const params = new URLSearchParams(searchParams.toString());
+  function buildListParams({
+    nextPage,
+    nextPageSize,
+    nextIndicationFilter,
+    nextStatusFilter,
+    nextLvefFilter,
+    nextPatientIdFilter,
+    nextPatientNameFilter,
+  }: {
+    nextPage: number;
+    nextPageSize: PageSize;
+    nextIndicationFilter: StudyIndication | 'all';
+    nextStatusFilter: StudyStatus | 'all';
+    nextLvefFilter: LvefFilter;
+    nextPatientIdFilter: string;
+    nextPatientNameFilter: string;
+  }) {
+    const params = new URLSearchParams();
     params.set('page', String(nextPage));
     params.set('pageSize', String(nextPageSize));
+    if (nextIndicationFilter !== 'all') params.set('indication', String(nextIndicationFilter));
+    if (nextStatusFilter !== 'all') params.set('status', String(nextStatusFilter));
+    if (nextLvefFilter !== 'all') params.set('lvef', nextLvefFilter);
+    if (nextPatientIdFilter.trim() !== '') params.set('patientId', nextPatientIdFilter);
+    if (nextPatientNameFilter.trim() !== '') params.set('patientName', nextPatientNameFilter);
+    return params;
+  }
+
+  function syncListStateToUrl({
+    nextPage = page,
+    nextPageSize = pageSize,
+    nextIndicationFilter = indicationFilter,
+    nextStatusFilter = statusFilter,
+    nextLvefFilter = lvefFilter,
+    nextPatientIdFilter = patientIdFilter,
+    nextPatientNameFilter = patientNameFilter,
+  }: {
+    nextPage?: number;
+    nextPageSize?: PageSize;
+    nextIndicationFilter?: StudyIndication | 'all';
+    nextStatusFilter?: StudyStatus | 'all';
+    nextLvefFilter?: LvefFilter;
+    nextPatientIdFilter?: string;
+    nextPatientNameFilter?: string;
+  }) {
+    const params = buildListParams({
+      nextPage,
+      nextPageSize,
+      nextIndicationFilter,
+      nextStatusFilter,
+      nextLvefFilter,
+      nextPatientIdFilter,
+      nextPatientNameFilter,
+    });
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   }
 
-  function readStoredPagination(): { page: number; pageSize: PageSize } | null {
+  function readStoredListState():
+    | {
+        page: number;
+        pageSize: PageSize;
+        indicationFilter: StudyIndication | 'all';
+        statusFilter: StudyStatus | 'all';
+        lvefFilter: LvefFilter;
+        patientIdFilter: string;
+        patientNameFilter: string;
+      }
+    | null {
     if (typeof window === 'undefined') return null;
     const raw = window.sessionStorage.getItem(studiesPaginationStorageKey);
     if (!raw) return null;
     try {
-      const parsed = JSON.parse(raw) as { page?: number; pageSize?: number };
+      const parsed = JSON.parse(raw) as {
+        page?: number;
+        pageSize?: number;
+        indicationFilter?: string;
+        statusFilter?: string;
+        lvefFilter?: string;
+        patientIdFilter?: string;
+        patientNameFilter?: string;
+      };
       const storedPage =
         typeof parsed.page === 'number' && Number.isInteger(parsed.page) && parsed.page >= 1
           ? parsed.page
@@ -50,7 +124,25 @@ function StudiesPageContent() {
       const storedPageSize =
         typeof parsed.pageSize === 'number' && isPageSize(parsed.pageSize) ? parsed.pageSize : null;
       if (!storedPage || !storedPageSize) return null;
-      return { page: storedPage, pageSize: storedPageSize };
+      return {
+        page: storedPage,
+        pageSize: storedPageSize,
+        indicationFilter:
+          typeof parsed.indicationFilter === 'string' && parsed.indicationFilter !== ''
+            ? (parsed.indicationFilter as StudyIndication)
+            : 'all',
+        statusFilter:
+          typeof parsed.statusFilter === 'string' && parsed.statusFilter !== ''
+            ? (parsed.statusFilter as StudyStatus)
+            : 'all',
+        lvefFilter:
+          typeof parsed.lvefFilter === 'string' && isLvefFilter(parsed.lvefFilter)
+            ? parsed.lvefFilter
+            : 'all',
+        patientIdFilter: typeof parsed.patientIdFilter === 'string' ? parsed.patientIdFilter : '',
+        patientNameFilter:
+          typeof parsed.patientNameFilter === 'string' ? parsed.patientNameFilter : '',
+      };
     } catch {
       return null;
     }
@@ -59,42 +151,85 @@ function StudiesPageContent() {
   function handlePatientIdClick(patientId: string) {
     setPatientIdFilter(patientId);
     setPage(1);
-    syncPaginationToUrl(1, pageSize);
+    syncListStateToUrl({ nextPage: 1, nextPatientIdFilter: patientId });
   }
 
   useEffect(() => {
     const pageParam = searchParams.get('page');
     const pageSizeParam = searchParams.get('pageSize');
     const hasPaginationInUrl = pageParam !== null && pageSizeParam !== null;
-    const stored = !hasPaginationInUrl ? readStoredPagination() : null;
+    const stored = !hasPaginationInUrl ? readStoredListState() : null;
 
     const rawPage = Number(pageParam);
     const parsedPageFromUrl = Number.isInteger(rawPage) && rawPage >= 1 ? rawPage : 1;
     const rawPageSize = Number(pageSizeParam);
     const parsedPageSizeFromUrl = isPageSize(rawPageSize) ? rawPageSize : 10;
+    const indicationParam = searchParams.get('indication');
+    const statusParam = searchParams.get('status');
+    const lvefParam = searchParams.get('lvef');
+    const patientIdParam = searchParams.get('patientId');
+    const patientNameParam = searchParams.get('patientName');
+
+    const parsedIndicationFilterFromUrl =
+      indicationParam && indicationParam !== '' ? (indicationParam as StudyIndication) : 'all';
+    const parsedStatusFilterFromUrl =
+      statusParam && statusParam !== '' ? (statusParam as StudyStatus) : 'all';
+    const parsedLvefFilterFromUrl =
+      lvefParam && isLvefFilter(lvefParam) ? lvefParam : 'all';
+    const parsedPatientIdFilterFromUrl = patientIdParam ?? '';
+    const parsedPatientNameFilterFromUrl = patientNameParam ?? '';
+
     const parsedPage = stored?.page ?? parsedPageFromUrl;
     const parsedPageSize = stored?.pageSize ?? parsedPageSizeFromUrl;
+    const parsedIndicationFilter = stored?.indicationFilter ?? parsedIndicationFilterFromUrl;
+    const parsedStatusFilter = stored?.statusFilter ?? parsedStatusFilterFromUrl;
+    const parsedLvefFilter = stored?.lvefFilter ?? parsedLvefFilterFromUrl;
+    const parsedPatientIdFilter = stored?.patientIdFilter ?? parsedPatientIdFilterFromUrl;
+    const parsedPatientNameFilter = stored?.patientNameFilter ?? parsedPatientNameFilterFromUrl;
 
     setPage((current) => (current === parsedPage ? current : parsedPage));
     setPageSize((current) => (current === parsedPageSize ? current : parsedPageSize));
+    setIndicationFilter((current) =>
+      current === parsedIndicationFilter ? current : parsedIndicationFilter,
+    );
+    setStatusFilter((current) => (current === parsedStatusFilter ? current : parsedStatusFilter));
+    setLvefFilter((current) => (current === parsedLvefFilter ? current : parsedLvefFilter));
+    setPatientIdFilter((current) =>
+      current === parsedPatientIdFilter ? current : parsedPatientIdFilter,
+    );
+    setPatientNameFilter((current) =>
+      current === parsedPatientNameFilter ? current : parsedPatientNameFilter,
+    );
 
-    const canonicalPage = String(parsedPage);
-    const canonicalPageSize = String(parsedPageSize);
-    if (
-      searchParams.get('page') !== canonicalPage ||
-      searchParams.get('pageSize') !== canonicalPageSize
-    ) {
-      syncPaginationToUrl(parsedPage, parsedPageSize);
+    const canonicalParams = buildListParams({
+      nextPage: parsedPage,
+      nextPageSize: parsedPageSize,
+      nextIndicationFilter: parsedIndicationFilter,
+      nextStatusFilter: parsedStatusFilter,
+      nextLvefFilter: parsedLvefFilter,
+      nextPatientIdFilter: parsedPatientIdFilter,
+      nextPatientNameFilter: parsedPatientNameFilter,
+    }).toString();
+    if (searchParams.toString() !== canonicalParams) {
+      router.replace(`${pathname}?${canonicalParams}`, { scroll: false });
     }
-  }, [searchParams]);
+  }, [pathname, router, searchParams]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
     window.sessionStorage.setItem(
       studiesPaginationStorageKey,
-      JSON.stringify({ page, pageSize }),
+      JSON.stringify({
+        page,
+        pageSize,
+        indicationFilter,
+        statusFilter,
+        lvefFilter,
+        patientIdFilter,
+        patientNameFilter,
+      }),
     );
-  }, [page, pageSize]);
+  }, [indicationFilter, lvefFilter, page, pageSize, patientIdFilter, patientNameFilter, statusFilter]);
 
   useEffect(() => {
     let cancelled = false;
@@ -137,11 +272,16 @@ function StudiesPageContent() {
   }, [studies]);
 
   const listQueryString = useMemo(() => {
-    const p = new URLSearchParams();
-    p.set('page', String(page));
-    p.set('pageSize', String(pageSize));
-    return p.toString();
-  }, [page, pageSize]);
+    return buildListParams({
+      nextPage: page,
+      nextPageSize: pageSize,
+      nextIndicationFilter: indicationFilter,
+      nextStatusFilter: statusFilter,
+      nextLvefFilter: lvefFilter,
+      nextPatientIdFilter: patientIdFilter,
+      nextPatientNameFilter: patientNameFilter,
+    }).toString();
+  }, [indicationFilter, lvefFilter, page, pageSize, patientIdFilter, patientNameFilter, statusFilter]);
 
   const filteredStudies = useMemo(() => {
     const patientIdNeedle = patientIdFilter.trim().toLowerCase();
@@ -167,9 +307,9 @@ function StudiesPageContent() {
     const clampedPage = Math.min(page, totalPages);
     if (clampedPage !== page) {
       setPage(clampedPage);
-      syncPaginationToUrl(clampedPage, pageSize);
+      syncListStateToUrl({ nextPage: clampedPage });
     }
-  }, [studies, filteredStudies.length, page, pageSize]);
+  }, [filteredStudies.length, page, pageSize, studies]);
 
   if (loading) {
     return (
@@ -205,9 +345,10 @@ function StudiesPageContent() {
                   className="rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 shadow-sm hover:bg-zinc-50"
                   value={indicationFilter}
                   onChange={(e) => {
-                    setIndicationFilter(e.target.value as StudyIndication | 'all');
+                    const nextIndicationFilter = e.target.value as StudyIndication | 'all';
+                    setIndicationFilter(nextIndicationFilter);
                     setPage(1);
-                    syncPaginationToUrl(1, pageSize);
+                    syncListStateToUrl({ nextPage: 1, nextIndicationFilter });
                   }}
                 >
                   <option value="all">All indications</option>
@@ -227,9 +368,10 @@ function StudiesPageContent() {
                   className="rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 shadow-sm hover:bg-zinc-50"
                   value={statusFilter}
                   onChange={(e) => {
-                    setStatusFilter(e.target.value as StudyStatus | 'all');
+                    const nextStatusFilter = e.target.value as StudyStatus | 'all';
+                    setStatusFilter(nextStatusFilter);
                     setPage(1);
-                    syncPaginationToUrl(1, pageSize);
+                    syncListStateToUrl({ nextPage: 1, nextStatusFilter });
                   }}
                 >
                   <option value="all">All statuses</option>
@@ -249,9 +391,10 @@ function StudiesPageContent() {
                   className="rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 shadow-sm hover:bg-zinc-50"
                   value={lvefFilter}
                   onChange={(e) => {
-                    setLvefFilter(e.target.value as 'all' | 'normal' | 'midly' | 'severly');
+                    const nextLvefFilter = e.target.value as LvefFilter;
+                    setLvefFilter(nextLvefFilter);
                     setPage(1);
-                    syncPaginationToUrl(1, pageSize);
+                    syncListStateToUrl({ nextPage: 1, nextLvefFilter });
                   }}
                 >
                   <option value="all">All LVEF</option>
@@ -273,9 +416,10 @@ function StudiesPageContent() {
                   className="w-44 rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 shadow-sm hover:bg-zinc-50"
                   value={patientIdFilter}
                   onChange={(e) => {
-                    setPatientIdFilter(e.target.value);
+                    const nextPatientIdFilter = e.target.value;
+                    setPatientIdFilter(nextPatientIdFilter);
                     setPage(1);
-                    syncPaginationToUrl(1, pageSize);
+                    syncListStateToUrl({ nextPage: 1, nextPatientIdFilter });
                   }}
                 />
               </label>
@@ -292,9 +436,10 @@ function StudiesPageContent() {
                   className="w-44 rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 shadow-sm hover:bg-zinc-50"
                   value={patientNameFilter}
                   onChange={(e) => {
-                    setPatientNameFilter(e.target.value);
+                    const nextPatientNameFilter = e.target.value;
+                    setPatientNameFilter(nextPatientNameFilter);
                     setPage(1);
-                    syncPaginationToUrl(1, pageSize);
+                    syncListStateToUrl({ nextPage: 1, nextPatientNameFilter });
                   }}
                 />
               </label>
@@ -309,7 +454,14 @@ function StudiesPageContent() {
                   setPatientIdFilter('');
                   setPatientNameFilter('');
                   setPage(1);
-                  syncPaginationToUrl(1, pageSize);
+                  syncListStateToUrl({
+                    nextPage: 1,
+                    nextIndicationFilter: 'all',
+                    nextStatusFilter: 'all',
+                    nextLvefFilter: 'all',
+                    nextPatientIdFilter: '',
+                    nextPatientNameFilter: '',
+                  });
                 }}
                 disabled={
                   indicationFilter === 'all' &&
@@ -338,12 +490,12 @@ function StudiesPageContent() {
           listQueryString={listQueryString}
           onPageChange={(nextPage) => {
             setPage(nextPage);
-            syncPaginationToUrl(nextPage, pageSize);
+            syncListStateToUrl({ nextPage });
           }}
           onPageSizeChange={(nextPageSize) => {
             setPageSize(nextPageSize);
             setPage(1);
-            syncPaginationToUrl(1, nextPageSize);
+            syncListStateToUrl({ nextPage: 1, nextPageSize });
           }}
           onPatientIdClick={handlePatientIdClick}
         />
