@@ -82,7 +82,7 @@ export default function StudiesPage() {
   return (
     <main className="flex flex-1 items-start justify-center bg-zinc-50 px-4 py-12">
       <section className="w-full max-w-5xl">
-        <div className="rounded-lg border border-zinc-200 bg-white p-4">
+        <div className="sticky top-4 z-10 rounded-lg border border-zinc-200 bg-white/95 p-4 backdrop-blur">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <h1 className="text-lg font-semibold tracking-tight text-zinc-900">
