@@ -8,6 +8,8 @@ const links = [
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
   { href: "/summary", label: "Summary" },
+  { href: "/studies", label: "Studies" },
+
 ] as const;
 
 export function TopMenu() {
