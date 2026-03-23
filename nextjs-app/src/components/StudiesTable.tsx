@@ -13,6 +13,8 @@ type StudiesTableProps = {
   page: number;
   pageSize: PageSizeOption;
   pageSizeOptions: readonly PageSizeOption[];
+  /** Query string (e.g. page=2&pageSize=25) preserved when opening a study and when returning. */
+  listQueryString?: string;
   onPageChange: (page: number) => void;
   onPageSizeChange: (pageSize: PageSizeOption) => void;
   onPatientIdClick?: (patientId: string) => void;
@@ -23,6 +25,7 @@ export default function StudiesTable({
   page,
   pageSize,
   pageSizeOptions,
+  listQueryString,
   onPageChange,
   onPageSizeChange,
   onPatientIdClick,
@@ -156,7 +159,11 @@ export default function StudiesTable({
                 </td>
                 <td className="px-4 py-2 text-right">
                   <Link
-                    href={`/studies/${s.id}`}
+                    href={
+                      listQueryString
+                        ? `/studies/${s.id}?${listQueryString}`
+                        : `/studies/${s.id}`
+                    }
                     aria-label={`Open study ${s.id}`}
                     className="inline-flex items-center rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-sm font-medium text-zinc-900 hover:bg-zinc-50"
                   >

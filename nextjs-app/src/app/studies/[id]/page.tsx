@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useParams, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 
 import type { Study } from '@/types/Study';
 import { StudyStatus } from '@/types/Study';
@@ -14,9 +14,15 @@ function formatLvef(value: number): string {
   return `${value.toFixed(0)}%`;
 }
 
-export default function StudyDetailPage() {
+function StudyDetailPageContent() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const id = Array.isArray(params?.id) ? params.id[0] : params?.id;
+
+  const studiesListHref = useMemo(() => {
+    const q = searchParams.toString();
+    return q ? `/studies?${q}` : '/studies';
+  }, [searchParams]);
 
   const [data, setData] = useState<StudyDetailResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -79,7 +85,7 @@ export default function StudyDetailPage() {
         <section className="w-full max-w-3xl">
           <div className="mb-6">
             <Link
-              href="/studies"
+              href={studiesListHref}
               className="inline-flex items-center rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-sm font-medium text-zinc-900 hover:bg-zinc-50"
             >
               Back to Studies
@@ -143,7 +149,7 @@ export default function StudyDetailPage() {
 
           <nav className="pt-2 flex items-center gap-2">
             <Link
-              href="/studies"
+              href={studiesListHref}
               className="inline-flex items-center rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-sm font-medium text-zinc-900 hover:bg-zinc-50"
             >
               Back to Studies
@@ -229,5 +235,19 @@ export default function StudyDetailPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+export default function StudyDetailPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex flex-1 items-center justify-center bg-zinc-50 px-4 py-16">
+          <p className="text-sm text-zinc-600">Loading study...</p>
+        </main>
+      }
+    >
+      <StudyDetailPageContent />
+    </Suspense>
   );
 }

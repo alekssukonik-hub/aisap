@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import StudiesTable from '@/components/StudiesTable';
@@ -13,7 +13,7 @@ function isPageSize(value: number): value is PageSize {
   return pageSizeOptions.includes(value as PageSize);
 }
 
-export default function StudiesPage() {
+function StudiesPageContent() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -99,6 +99,13 @@ export default function StudiesPage() {
     const values = Array.from(new Set((studies ?? []).map((s) => s.status)));
     return values.sort((a, b) => String(a).localeCompare(String(b)));
   }, [studies]);
+
+  const listQueryString = useMemo(() => {
+    const p = new URLSearchParams();
+    p.set('page', String(page));
+    p.set('pageSize', String(pageSize));
+    return p.toString();
+  }, [page, pageSize]);
 
   const filteredStudies = useMemo(() => {
     const patientIdNeedle = patientIdFilter.trim().toLowerCase();
@@ -293,6 +300,7 @@ export default function StudiesPage() {
           page={page}
           pageSize={pageSize}
           pageSizeOptions={pageSizeOptions}
+          listQueryString={listQueryString}
           onPageChange={(nextPage) => {
             setPage(nextPage);
             syncPaginationToUrl(nextPage, pageSize);
@@ -306,5 +314,19 @@ export default function StudiesPage() {
         />
       </section>
     </main>
+  );
+}
+
+export default function StudiesPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex flex-1 items-center justify-center bg-zinc-50 px-4 py-16">
+          <p className="text-sm text-zinc-600">Loading studies...</p>
+        </main>
+      }
+    >
+      <StudiesPageContent />
+    </Suspense>
   );
 }
