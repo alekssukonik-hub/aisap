@@ -79,10 +79,10 @@ export default function StudyDetailPage() {
         <section className="w-full max-w-3xl">
           <div className="mb-6">
             <Link
-              href="/summary"
+              href="/"
               className="inline-flex items-center rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-sm font-medium text-zinc-900 hover:bg-zinc-50"
             >
-              Back to Summary
+              Back to Home
             </Link>
             <Link
               href="/studies"
@@ -147,10 +147,10 @@ export default function StudyDetailPage() {
 
           <nav className="pt-2 flex items-center gap-2">
             <Link
-              href="/summary"
+              href="/"
               className="inline-flex items-center rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-sm font-medium text-zinc-900 hover:bg-zinc-50"
             >
-              Back to Summary
+              Back to Home
             </Link>
             <Link
               href="/studies"

@@ -1,1 +1,1 @@
-export { default } from "./summary/page";
+export { default } from "./studies/page";

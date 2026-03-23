@@ -4,9 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const links = [
-  { href: "/", label: "Summary" },
-  { href: "/studies", label: "Studies" },
-
+  { href: "/", label: "Studies" },
 ] as const;
 
 export function TopMenu() {
@@ -24,10 +22,7 @@ export function TopMenu() {
 
         <nav className="flex items-center gap-4">
           {links.map((link) => {
-            const isActive =
-              link.href === "/"
-                ? pathname === "/" || pathname === "/summary"
-                : pathname === link.href || pathname.startsWith(`${link.href}/`);
+            const isActive = pathname === link.href || pathname.startsWith(`${link.href}/`);
 
             return (
               <Link
