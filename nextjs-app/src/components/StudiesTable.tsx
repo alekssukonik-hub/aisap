@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import type { StudySummary } from "@/types/Study";
 import { formatLvef } from "@/utils/formatLvef";
 
@@ -28,6 +30,9 @@ export default function StudiesTable({ studies }: StudiesTableProps) {
               <th className="px-4 py-2 text-left font-medium text-zinc-700">
                 Status
               </th>
+              <th className="px-4 py-2 text-right font-medium text-zinc-700">
+                Open
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -49,13 +54,22 @@ export default function StudiesTable({ studies }: StudiesTableProps) {
                 <td className="px-4 py-2 text-zinc-900">
                   {String(s.status)}
                 </td>
+                <td className="px-4 py-2 text-right">
+                  <Link
+                    href={`/studies/${s.id}`}
+                    aria-label={`Open study ${s.id}`}
+                    className="inline-flex items-center rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-sm font-medium text-zinc-900 hover:bg-zinc-50"
+                  >
+                    Open
+                  </Link>
+                </td>
               </tr>
             ))}
             {studies.length === 0 ? (
               <tr>
                 <td
                   className="px-4 py-6 text-center text-zinc-600"
-                  colSpan={5}
+                  colSpan={6}
                 >
                   No studies available.
                 </td>
