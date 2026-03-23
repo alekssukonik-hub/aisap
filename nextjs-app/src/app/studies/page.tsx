@@ -7,12 +7,11 @@ import StudiesTable, {
   type StudiesTableSortDir,
   type StudiesTableSortKey,
 } from '@/components/StudiesTable';
+import { LvefFilter, isLvefFilter } from '@/enums/LvefFilter';
 import type { StudyIndication, StudyStatus, StudySummary } from '@/types/Study';
 
 const pageSizeOptions = [10, 25, 50, 100] as const;
 type PageSize = (typeof pageSizeOptions)[number];
-const lvefFilterOptions = ['all', 'normal', 'midly', 'severly'] as const;
-type LvefFilter = (typeof lvefFilterOptions)[number];
 const studiesPaginationStorageKey = 'studies.pagination';
 
 const studiesSortKeys = [
@@ -66,10 +65,6 @@ function isPageSize(value: number): value is PageSize {
   return pageSizeOptions.includes(value as PageSize);
 }
 
-function isLvefFilter(value: string): value is LvefFilter {
-  return lvefFilterOptions.includes(value as LvefFilter);
-}
-
 function StudiesPageContent() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -80,7 +75,7 @@ function StudiesPageContent() {
   const [error, setError] = useState<string | null>(null);
   const [indicationFilter, setIndicationFilter] = useState<StudyIndication | 'all'>('all');
   const [statusFilter, setStatusFilter] = useState<StudyStatus | 'all'>('all');
-  const [lvefFilter, setLvefFilter] = useState<'all' | 'normal' | 'midly' | 'severly'>('all');
+  const [lvefFilter, setLvefFilter] = useState<LvefFilter>(LvefFilter.All);
   const [patientIdFilter, setPatientIdFilter] = useState<string>('');
   const [patientNameFilter, setPatientNameFilter] = useState<string>('');
   const [pageSize, setPageSize] = useState<PageSize>(10);
@@ -114,7 +109,7 @@ function StudiesPageContent() {
     params.set('pageSize', String(nextPageSize));
     if (nextIndicationFilter !== 'all') params.set('indication', String(nextIndicationFilter));
     if (nextStatusFilter !== 'all') params.set('status', String(nextStatusFilter));
-    if (nextLvefFilter !== 'all') params.set('lvef', nextLvefFilter);
+    if (nextLvefFilter !== LvefFilter.All) params.set('lvef', nextLvefFilter);
     if (nextPatientIdFilter.trim() !== '') params.set('patientId', nextPatientIdFilter);
     if (nextPatientNameFilter.trim() !== '') params.set('patientName', nextPatientNameFilter);
     if (nextSortKey !== null) {
@@ -208,7 +203,7 @@ function StudiesPageContent() {
         lvefFilter:
           typeof parsed.lvefFilter === 'string' && isLvefFilter(parsed.lvefFilter)
             ? parsed.lvefFilter
-            : 'all',
+            : LvefFilter.All,
         patientIdFilter: typeof parsed.patientIdFilter === 'string' ? parsed.patientIdFilter : '',
         patientNameFilter:
           typeof parsed.patientNameFilter === 'string' ? parsed.patientNameFilter : '',
@@ -277,7 +272,7 @@ function StudiesPageContent() {
     const parsedStatusFilterFromUrl =
       statusParam && statusParam !== '' ? (statusParam as StudyStatus) : 'all';
     const parsedLvefFilterFromUrl =
-      lvefParam && isLvefFilter(lvefParam) ? lvefParam : 'all';
+      lvefParam && isLvefFilter(lvefParam) ? lvefParam : LvefFilter.All;
     const parsedPatientIdFilterFromUrl = patientIdParam ?? '';
     const parsedPatientNameFilterFromUrl = patientNameParam ?? '';
 
@@ -430,10 +425,10 @@ function StudiesPageContent() {
     return (studies ?? []).filter((s) => {
       if (indicationFilter !== 'all' && s.indication !== indicationFilter) return false;
       if (statusFilter !== 'all' && s.status !== statusFilter) return false;
-      if (lvefFilter !== 'all') {
-        if (lvefFilter === 'normal' && s.lvef < 55) return false;
-        if (lvefFilter === 'midly' && (s.lvef < 40 || s.lvef > 54)) return false;
-        if (lvefFilter === 'severly' && s.lvef >= 40) return false;
+      if (lvefFilter !== LvefFilter.All) {
+        if (lvefFilter === LvefFilter.Normal && s.lvef < 55) return false;
+        if (lvefFilter === LvefFilter.Midly && (s.lvef < 40 || s.lvef > 54)) return false;
+        if (lvefFilter === LvefFilter.Severly && s.lvef >= 40) return false;
       }
       if (patientIdNeedle && !s.patientId.toLowerCase().includes(patientIdNeedle)) return false;
       if (patientNameNeedle && !s.patientName.toLowerCase().includes(patientNameNeedle))
@@ -537,16 +532,17 @@ function StudiesPageContent() {
                   className="rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 shadow-sm hover:bg-zinc-50"
                   value={lvefFilter}
                   onChange={(e) => {
-                    const nextLvefFilter = e.target.value as LvefFilter;
+                    const v = e.target.value;
+                    const nextLvefFilter = isLvefFilter(v) ? v : LvefFilter.All;
                     setLvefFilter(nextLvefFilter);
                     setPage(1);
                     syncListStateToUrl({ nextPage: 1, nextLvefFilter });
                   }}
                 >
-                  <option value="all">All LVEF</option>
-                  <option value="normal">Normal (&gt;= 55%)</option>
-                  <option value="midly">Midly reduces (40% - 54%)</option>
-                  <option value="severly">Severly reduces (&lt; 40%)</option>
+                  <option value={LvefFilter.All}>All LVEF</option>
+                  <option value={LvefFilter.Normal}>Normal (&gt;= 55%)</option>
+                  <option value={LvefFilter.Midly}>Midly reduces (40% - 54%)</option>
+                  <option value={LvefFilter.Severly}>Severly reduces (&lt; 40%)</option>
                 </select>
               </label>
 
@@ -596,7 +592,7 @@ function StudiesPageContent() {
                 onClick={() => {
                   setIndicationFilter('all');
                   setStatusFilter('all');
-                  setLvefFilter('all');
+                  setLvefFilter(LvefFilter.All);
                   setPatientIdFilter('');
                   setPatientNameFilter('');
                   setPage(1);
@@ -606,7 +602,7 @@ function StudiesPageContent() {
                     nextPage: 1,
                     nextIndicationFilter: 'all',
                     nextStatusFilter: 'all',
-                    nextLvefFilter: 'all',
+                    nextLvefFilter: LvefFilter.All,
                     nextPatientIdFilter: '',
                     nextPatientNameFilter: '',
                     nextSortKey: null,
@@ -616,7 +612,7 @@ function StudiesPageContent() {
                 disabled={
                   indicationFilter === 'all' &&
                   statusFilter === 'all' &&
-                  lvefFilter === 'all' &&
+                  lvefFilter === LvefFilter.All &&
                   patientIdFilter.trim() === '' &&
                   patientNameFilter.trim() === '' &&
                   sortKey === null
@@ -627,10 +623,6 @@ function StudiesPageContent() {
             </div>
           </div>
 
-          <p className="mt-3 text-sm text-zinc-600">
-            Showing <span className="font-semibold text-zinc-900">{sortedStudies.length}</span>{' '}
-            {sortedStudies.length === 1 ? 'study' : 'studies'}.
-          </p>
         </div>
 
         <StudiesTable
