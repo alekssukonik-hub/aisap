@@ -3,7 +3,10 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 
-import StudiesTable from '@/components/StudiesTable';
+import StudiesTable, {
+  type StudiesTableSortDir,
+  type StudiesTableSortKey,
+} from '@/components/StudiesTable';
 import type { StudyIndication, StudyStatus, StudySummary } from '@/types/Study';
 
 const pageSizeOptions = [10, 25, 50, 100] as const;
@@ -11,6 +14,53 @@ type PageSize = (typeof pageSizeOptions)[number];
 const lvefFilterOptions = ['all', 'normal', 'midly', 'severly'] as const;
 type LvefFilter = (typeof lvefFilterOptions)[number];
 const studiesPaginationStorageKey = 'studies.pagination';
+
+const studiesSortKeys = [
+  'patientName',
+  'studyDate',
+  'indication',
+  'lvef',
+  'status',
+] as const satisfies readonly StudiesTableSortKey[];
+
+function isStudiesSortKey(value: string): value is StudiesTableSortKey {
+  return (studiesSortKeys as readonly string[]).includes(value);
+}
+
+function isStudiesSortDir(value: string): value is StudiesTableSortDir {
+  return value === 'asc' || value === 'desc';
+}
+
+function compareStudiesForSort(
+  a: StudySummary,
+  b: StudySummary,
+  key: StudiesTableSortKey,
+  dir: StudiesTableSortDir,
+): number {
+  const mult = dir === 'asc' ? 1 : -1;
+  let cmp = 0;
+  switch (key) {
+    case 'patientName':
+      cmp = a.patientName.localeCompare(b.patientName, undefined, { sensitivity: 'base' });
+      break;
+    case 'studyDate':
+      cmp = a.studyDate.localeCompare(b.studyDate);
+      break;
+    case 'indication':
+      cmp = String(a.indication).localeCompare(String(b.indication));
+      break;
+    case 'lvef':
+      cmp = a.lvef - b.lvef;
+      break;
+    case 'status':
+      cmp = String(a.status).localeCompare(String(b.status));
+      break;
+    default:
+      return 0;
+  }
+  if (cmp !== 0) return mult * cmp;
+  return a.id.localeCompare(b.id);
+}
 
 function isPageSize(value: number): value is PageSize {
   return pageSizeOptions.includes(value as PageSize);
@@ -35,6 +85,8 @@ function StudiesPageContent() {
   const [patientNameFilter, setPatientNameFilter] = useState<string>('');
   const [pageSize, setPageSize] = useState<PageSize>(10);
   const [page, setPage] = useState(1);
+  const [sortKey, setSortKey] = useState<StudiesTableSortKey | null>(null);
+  const [sortDir, setSortDir] = useState<StudiesTableSortDir>('asc');
 
   function buildListParams({
     nextPage,
@@ -44,6 +96,8 @@ function StudiesPageContent() {
     nextLvefFilter,
     nextPatientIdFilter,
     nextPatientNameFilter,
+    nextSortKey,
+    nextSortDir,
   }: {
     nextPage: number;
     nextPageSize: PageSize;
@@ -52,6 +106,8 @@ function StudiesPageContent() {
     nextLvefFilter: LvefFilter;
     nextPatientIdFilter: string;
     nextPatientNameFilter: string;
+    nextSortKey: StudiesTableSortKey | null;
+    nextSortDir: StudiesTableSortDir;
   }) {
     const params = new URLSearchParams();
     params.set('page', String(nextPage));
@@ -61,6 +117,10 @@ function StudiesPageContent() {
     if (nextLvefFilter !== 'all') params.set('lvef', nextLvefFilter);
     if (nextPatientIdFilter.trim() !== '') params.set('patientId', nextPatientIdFilter);
     if (nextPatientNameFilter.trim() !== '') params.set('patientName', nextPatientNameFilter);
+    if (nextSortKey !== null) {
+      params.set('sort', nextSortKey);
+      params.set('sortDir', nextSortDir);
+    }
     return params;
   }
 
@@ -72,6 +132,8 @@ function StudiesPageContent() {
     nextLvefFilter = lvefFilter,
     nextPatientIdFilter = patientIdFilter,
     nextPatientNameFilter = patientNameFilter,
+    nextSortKey = sortKey,
+    nextSortDir = sortDir,
   }: {
     nextPage?: number;
     nextPageSize?: PageSize;
@@ -80,6 +142,8 @@ function StudiesPageContent() {
     nextLvefFilter?: LvefFilter;
     nextPatientIdFilter?: string;
     nextPatientNameFilter?: string;
+    nextSortKey?: StudiesTableSortKey | null;
+    nextSortDir?: StudiesTableSortDir;
   }) {
     const params = buildListParams({
       nextPage,
@@ -89,6 +153,8 @@ function StudiesPageContent() {
       nextLvefFilter,
       nextPatientIdFilter,
       nextPatientNameFilter,
+      nextSortKey,
+      nextSortDir,
     });
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   }
@@ -102,6 +168,8 @@ function StudiesPageContent() {
         lvefFilter: LvefFilter;
         patientIdFilter: string;
         patientNameFilter: string;
+        sortKey: StudiesTableSortKey | null;
+        sortDir: StudiesTableSortDir;
       }
     | null {
     if (typeof window === 'undefined') return null;
@@ -116,6 +184,8 @@ function StudiesPageContent() {
         lvefFilter?: string;
         patientIdFilter?: string;
         patientNameFilter?: string;
+        sort?: string;
+        sortDir?: string;
       };
       const storedPage =
         typeof parsed.page === 'number' && Number.isInteger(parsed.page) && parsed.page >= 1
@@ -142,6 +212,19 @@ function StudiesPageContent() {
         patientIdFilter: typeof parsed.patientIdFilter === 'string' ? parsed.patientIdFilter : '',
         patientNameFilter:
           typeof parsed.patientNameFilter === 'string' ? parsed.patientNameFilter : '',
+        ...(() => {
+          const sk =
+            typeof parsed.sort === 'string' && isStudiesSortKey(parsed.sort) ? parsed.sort : null;
+          return {
+            sortKey: sk,
+            sortDir:
+              sk === null
+                ? 'asc'
+                : typeof parsed.sortDir === 'string' && isStudiesSortDir(parsed.sortDir)
+                  ? parsed.sortDir
+                  : 'asc',
+          };
+        })(),
       };
     } catch {
       return null;
@@ -198,6 +281,13 @@ function StudiesPageContent() {
     const parsedPatientIdFilterFromUrl = patientIdParam ?? '';
     const parsedPatientNameFilterFromUrl = patientNameParam ?? '';
 
+    const sortParam = searchParams.get('sort');
+    const sortDirParam = searchParams.get('sortDir');
+    const parsedSortKeyFromUrl =
+      sortParam && isStudiesSortKey(sortParam) ? sortParam : null;
+    const parsedSortDirFromUrl =
+      sortDirParam && isStudiesSortDir(sortDirParam) ? sortDirParam : 'asc';
+
     const parsedPage = stored?.page ?? parsedPageFromUrl;
     const parsedPageSize = stored?.pageSize ?? parsedPageSizeFromUrl;
     const parsedIndicationFilter = stored?.indicationFilter ?? parsedIndicationFilterFromUrl;
@@ -205,6 +295,10 @@ function StudiesPageContent() {
     const parsedLvefFilter = stored?.lvefFilter ?? parsedLvefFilterFromUrl;
     const parsedPatientIdFilter = stored?.patientIdFilter ?? parsedPatientIdFilterFromUrl;
     const parsedPatientNameFilter = stored?.patientNameFilter ?? parsedPatientNameFilterFromUrl;
+    const parsedSortKey = stored?.sortKey ?? parsedSortKeyFromUrl;
+    const parsedSortDirRaw = stored?.sortDir ?? parsedSortDirFromUrl;
+    const parsedSortDir =
+      parsedSortKey === null ? 'asc' : parsedSortDirRaw;
 
     setPage((current) => (current === parsedPage ? current : parsedPage));
     setPageSize((current) => (current === parsedPageSize ? current : parsedPageSize));
@@ -219,6 +313,8 @@ function StudiesPageContent() {
     setPatientNameFilter((current) =>
       current === parsedPatientNameFilter ? current : parsedPatientNameFilter,
     );
+    setSortKey((current) => (current === parsedSortKey ? current : parsedSortKey));
+    setSortDir((current) => (current === parsedSortDir ? current : parsedSortDir));
 
     const canonicalParams = buildListParams({
       nextPage: parsedPage,
@@ -228,6 +324,8 @@ function StudiesPageContent() {
       nextLvefFilter: parsedLvefFilter,
       nextPatientIdFilter: parsedPatientIdFilter,
       nextPatientNameFilter: parsedPatientNameFilter,
+      nextSortKey: parsedSortKey,
+      nextSortDir: parsedSortDir,
     }).toString();
     if (searchParams.toString() !== canonicalParams) {
       router.replace(`${pathname}?${canonicalParams}`, { scroll: false });
@@ -246,9 +344,21 @@ function StudiesPageContent() {
         lvefFilter,
         patientIdFilter,
         patientNameFilter,
+        sort: sortKey,
+        sortDir,
       }),
     );
-  }, [indicationFilter, lvefFilter, page, pageSize, patientIdFilter, patientNameFilter, statusFilter]);
+  }, [
+    indicationFilter,
+    lvefFilter,
+    page,
+    pageSize,
+    patientIdFilter,
+    patientNameFilter,
+    sortDir,
+    sortKey,
+    statusFilter,
+  ]);
 
   useEffect(() => {
     let cancelled = false;
@@ -299,8 +409,20 @@ function StudiesPageContent() {
       nextLvefFilter: lvefFilter,
       nextPatientIdFilter: patientIdFilter,
       nextPatientNameFilter: patientNameFilter,
+      nextSortKey: sortKey,
+      nextSortDir: sortDir,
     }).toString();
-  }, [indicationFilter, lvefFilter, page, pageSize, patientIdFilter, patientNameFilter, statusFilter]);
+  }, [
+    indicationFilter,
+    lvefFilter,
+    page,
+    pageSize,
+    patientIdFilter,
+    patientNameFilter,
+    sortDir,
+    sortKey,
+    statusFilter,
+  ]);
 
   const filteredStudies = useMemo(() => {
     const patientIdNeedle = patientIdFilter.trim().toLowerCase();
@@ -320,15 +442,20 @@ function StudiesPageContent() {
     });
   }, [studies, indicationFilter, patientIdFilter, patientNameFilter, statusFilter, lvefFilter]);
 
+  const sortedStudies = useMemo(() => {
+    if (sortKey === null) return filteredStudies;
+    return [...filteredStudies].sort((a, b) => compareStudiesForSort(a, b, sortKey, sortDir));
+  }, [filteredStudies, sortDir, sortKey]);
+
   useEffect(() => {
     if (studies === null) return;
-    const totalPages = Math.max(1, Math.ceil(filteredStudies.length / pageSize));
+    const totalPages = Math.max(1, Math.ceil(sortedStudies.length / pageSize));
     const clampedPage = Math.min(page, totalPages);
     if (clampedPage !== page) {
       setPage(clampedPage);
       syncListStateToUrl({ nextPage: clampedPage });
     }
-  }, [filteredStudies.length, page, pageSize, studies]);
+  }, [page, pageSize, sortedStudies.length, studies]);
 
   if (loading) {
     return (
@@ -473,6 +600,8 @@ function StudiesPageContent() {
                   setPatientIdFilter('');
                   setPatientNameFilter('');
                   setPage(1);
+                  setSortKey(null);
+                  setSortDir('asc');
                   syncListStateToUrl({
                     nextPage: 1,
                     nextIndicationFilter: 'all',
@@ -480,6 +609,8 @@ function StudiesPageContent() {
                     nextLvefFilter: 'all',
                     nextPatientIdFilter: '',
                     nextPatientNameFilter: '',
+                    nextSortKey: null,
+                    nextSortDir: 'asc',
                   });
                 }}
                 disabled={
@@ -487,7 +618,8 @@ function StudiesPageContent() {
                   statusFilter === 'all' &&
                   lvefFilter === 'all' &&
                   patientIdFilter.trim() === '' &&
-                  patientNameFilter.trim() === ''
+                  patientNameFilter.trim() === '' &&
+                  sortKey === null
                 }
               >
                 Reset
@@ -496,17 +628,31 @@ function StudiesPageContent() {
           </div>
 
           <p className="mt-3 text-sm text-zinc-600">
-            Showing <span className="font-semibold text-zinc-900">{filteredStudies.length}</span>{' '}
-            {filteredStudies.length === 1 ? 'study' : 'studies'}.
+            Showing <span className="font-semibold text-zinc-900">{sortedStudies.length}</span>{' '}
+            {sortedStudies.length === 1 ? 'study' : 'studies'}.
           </p>
         </div>
 
         <StudiesTable
-          studies={filteredStudies}
+          studies={sortedStudies}
           page={page}
           pageSize={pageSize}
           pageSizeOptions={pageSizeOptions}
           listQueryString={listQueryString}
+          sortKey={sortKey}
+          sortDir={sortDir}
+          onSort={(key) => {
+            if (sortKey === key) {
+              const nextDir = sortDir === 'asc' ? 'desc' : 'asc';
+              setSortDir(nextDir);
+              syncListStateToUrl({ nextSortDir: nextDir });
+            } else {
+              setSortKey(key);
+              setSortDir('asc');
+              setPage(1);
+              syncListStateToUrl({ nextPage: 1, nextSortKey: key, nextSortDir: 'asc' });
+            }
+          }}
           onPageChange={(nextPage) => {
             setPage(nextPage);
             syncListStateToUrl({ nextPage });

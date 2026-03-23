@@ -9,6 +9,15 @@ import { formatLvef } from '@/utils/formatLvef';
 
 type PageSizeOption = 10 | 25 | 50 | 100;
 
+export type StudiesTableSortKey =
+  | 'patientName'
+  | 'studyDate'
+  | 'indication'
+  | 'lvef'
+  | 'status';
+
+export type StudiesTableSortDir = 'asc' | 'desc';
+
 type StudiesTableProps = {
   studies: StudySummary[];
   page: number;
@@ -16,11 +25,52 @@ type StudiesTableProps = {
   pageSizeOptions: readonly PageSizeOption[];
   /** Query string (e.g. page=2&pageSize=25) preserved when opening a study and when returning. */
   listQueryString?: string;
+  sortKey: StudiesTableSortKey | null;
+  sortDir: StudiesTableSortDir;
+  onSort: (key: StudiesTableSortKey) => void;
   onPageChange: (page: number) => void;
   onPageSizeChange: (pageSize: PageSizeOption) => void;
   onPatientIdClick?: (patientId: string) => void;
   onStatusChange: (studyId: string, status: StudyStatusType) => Promise<void>;
 };
+
+function SortableTh({
+  label,
+  columnKey,
+  sortKey,
+  sortDir,
+  onSort,
+  className = '',
+}: {
+  label: string;
+  columnKey: StudiesTableSortKey;
+  sortKey: StudiesTableSortKey | null;
+  sortDir: StudiesTableSortDir;
+  onSort: (key: StudiesTableSortKey) => void;
+  className?: string;
+}) {
+  const active = sortKey === columnKey;
+  return (
+    <th
+      scope="col"
+      className={`px-4 py-2 text-left font-medium text-zinc-700 ${className}`.trim()}
+      aria-sort={active ? (sortDir === 'asc' ? 'ascending' : 'descending') : undefined}
+    >
+      <button
+        type="button"
+        onClick={() => onSort(columnKey)}
+        className="-mx-1 -my-0.5 inline-flex w-full items-center gap-1 rounded px-1 py-0.5 text-left font-medium text-zinc-700 hover:bg-zinc-200/80 hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-400"
+      >
+        <span>{label}</span>
+        {active ? (
+          <span className="text-zinc-500" aria-hidden>
+            {sortDir === 'asc' ? '↑' : '↓'}
+          </span>
+        ) : null}
+      </button>
+    </th>
+  );
+}
 
 export default function StudiesTable({
   studies,
@@ -28,6 +78,9 @@ export default function StudiesTable({
   pageSize,
   pageSizeOptions,
   listQueryString,
+  sortKey,
+  sortDir,
+  onSort,
   onPageChange,
   onPageSizeChange,
   onPatientIdClick,
@@ -117,12 +170,42 @@ export default function StudiesTable({
         <table className="min-w-full text-sm">
           <thead className="bg-zinc-50">
             <tr>
-              <th className="px-4 py-2 text-left font-medium text-zinc-700">Patient</th>
-              <th className="px-4 py-2 text-left font-medium text-zinc-700">Study Date</th>
-              <th className="px-4 py-2 text-left font-medium text-zinc-700">Indication</th>
-              <th className="px-4 py-2 text-left font-medium text-zinc-700">LVEF</th>
-              <th className="px-4 py-2 text-left font-medium text-zinc-700">Status</th>
-              <th className="px-4 py-2 text-right font-medium text-zinc-700"></th>
+              <SortableTh
+                label="Patient"
+                columnKey="patientName"
+                sortKey={sortKey}
+                sortDir={sortDir}
+                onSort={onSort}
+              />
+              <SortableTh
+                label="Study Date"
+                columnKey="studyDate"
+                sortKey={sortKey}
+                sortDir={sortDir}
+                onSort={onSort}
+              />
+              <SortableTh
+                label="Indication"
+                columnKey="indication"
+                sortKey={sortKey}
+                sortDir={sortDir}
+                onSort={onSort}
+              />
+              <SortableTh
+                label="LVEF"
+                columnKey="lvef"
+                sortKey={sortKey}
+                sortDir={sortDir}
+                onSort={onSort}
+              />
+              <SortableTh
+                label="Status"
+                columnKey="status"
+                sortKey={sortKey}
+                sortDir={sortDir}
+                onSort={onSort}
+              />
+              <th className="px-4 py-2 text-right font-medium text-zinc-700" />
             </tr>
           </thead>
           <tbody>
