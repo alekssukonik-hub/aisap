@@ -12,6 +12,7 @@ export default function StudiesPage() {
   const [indicationFilter, setIndicationFilter] = useState<StudyIndication | "all">("all");
   const [statusFilter, setStatusFilter] = useState<StudyStatus | "all">("all");
   const [patientIdFilter, setPatientIdFilter] = useState<string>("");
+  const [patientNameFilter, setPatientNameFilter] = useState<string>("");
 
   function handlePatientIdClick(patientId: string) {
     setPatientIdFilter(patientId);
@@ -59,13 +60,15 @@ export default function StudiesPage() {
 
   const filteredStudies = useMemo(() => {
     const patientIdNeedle = patientIdFilter.trim().toLowerCase();
+    const patientNameNeedle = patientNameFilter.trim().toLowerCase();
     return (studies ?? []).filter((s) => {
       if (indicationFilter !== "all" && s.indication !== indicationFilter) return false;
       if (statusFilter !== "all" && s.status !== statusFilter) return false;
       if (patientIdNeedle && !s.patientId.toLowerCase().includes(patientIdNeedle)) return false;
+      if (patientNameNeedle && !s.patientName.toLowerCase().includes(patientNameNeedle)) return false;
       return true;
     });
-  }, [studies, indicationFilter, patientIdFilter, statusFilter]);
+  }, [studies, indicationFilter, patientIdFilter, patientNameFilter, statusFilter]);
 
   if (loading) {
     return (
@@ -149,6 +152,21 @@ export default function StudiesPage() {
                 />
               </label>
 
+              <label className="flex flex-col gap-1">
+                <span className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+                  Patient name
+                </span>
+                <input
+                  type="text"
+                  inputMode="search"
+                  autoComplete="off"
+                  placeholder="Type to filter"
+                  className="w-44 rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 shadow-sm hover:bg-zinc-50"
+                  value={patientNameFilter}
+                  onChange={(e) => setPatientNameFilter(e.target.value)}
+                />
+              </label>
+
               <div className="flex items-center">
                 <button
                   type="button"
@@ -157,11 +175,13 @@ export default function StudiesPage() {
                     setIndicationFilter("all");
                     setStatusFilter("all");
                     setPatientIdFilter("");
+                    setPatientNameFilter("");
                   }}
                   disabled={
                     indicationFilter === "all" &&
                     statusFilter === "all" &&
-                    patientIdFilter.trim() === ""
+                    patientIdFilter.trim() === "" &&
+                    patientNameFilter.trim() === ""
                   }
                 >
                   Reset
