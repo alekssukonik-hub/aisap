@@ -11,6 +11,9 @@ export default function StudiesPage() {
   const [error, setError] = useState<string | null>(null);
   const [indicationFilter, setIndicationFilter] = useState<StudyIndication | 'all'>('all');
   const [statusFilter, setStatusFilter] = useState<StudyStatus | 'all'>('all');
+  const [lvefFilter, setLvefFilter] = useState<'all' | 'normal' | 'midly' | 'severly'>(
+    'all',
+  );
   const [patientIdFilter, setPatientIdFilter] = useState<string>('');
   const [patientNameFilter, setPatientNameFilter] = useState<string>('');
 
@@ -64,12 +67,17 @@ export default function StudiesPage() {
     return (studies ?? []).filter((s) => {
       if (indicationFilter !== 'all' && s.indication !== indicationFilter) return false;
       if (statusFilter !== 'all' && s.status !== statusFilter) return false;
+      if (lvefFilter !== 'all') {
+        if (lvefFilter === 'normal' && s.lvef < 55) return false;
+        if (lvefFilter === 'midly' && (s.lvef < 40 || s.lvef > 54)) return false;
+        if (lvefFilter === 'severly' && s.lvef >= 40) return false;
+      }
       if (patientIdNeedle && !s.patientId.toLowerCase().includes(patientIdNeedle)) return false;
       if (patientNameNeedle && !s.patientName.toLowerCase().includes(patientNameNeedle))
         return false;
       return true;
     });
-  }, [studies, indicationFilter, patientIdFilter, patientNameFilter, statusFilter]);
+  }, [studies, indicationFilter, patientIdFilter, patientNameFilter, statusFilter, lvefFilter]);
 
   if (loading) {
     return (
@@ -93,7 +101,7 @@ export default function StudiesPage() {
         <div className="sticky top-4 z-10 rounded-lg border border-zinc-200 bg-white/95 p-4 backdrop-blur">
           <h1 className="text-lg font-semibold tracking-tight text-zinc-900">Filter studies</h1>
           <p className="mt-1 text-sm text-zinc-600 pb-3">
-            Refine by indication, status, and patient id.
+            Refine by indication, status, LVEF, and patient id.
           </p>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div className="flex flex-wrap gap-3">
@@ -135,6 +143,24 @@ export default function StudiesPage() {
 
               <label className="flex flex-col gap-1">
                 <span className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+                  LVEF
+                </span>
+                <select
+                  className="rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 shadow-sm hover:bg-zinc-50"
+                  value={lvefFilter}
+                  onChange={(e) =>
+                    setLvefFilter(e.target.value as 'all' | 'normal' | 'midly' | 'severly')
+                  }
+                >
+                  <option value="all">All LVEF</option>
+                  <option value="normal">Normal (&gt;= 55%)</option>
+                  <option value="midly">Midly reduces (40% - 54%)</option>
+                  <option value="severly">Severly reduces (&lt; 40%)</option>
+                </select>
+              </label>
+
+              <label className="flex flex-col gap-1">
+                <span className="text-xs font-medium uppercase tracking-wider text-zinc-500">
                   Patient ID
                 </span>
                 <input
@@ -170,12 +196,14 @@ export default function StudiesPage() {
                   onClick={() => {
                     setIndicationFilter('all');
                     setStatusFilter('all');
+                    setLvefFilter('all');
                     setPatientIdFilter('');
                     setPatientNameFilter('');
                   }}
                   disabled={
                     indicationFilter === 'all' &&
                     statusFilter === 'all' &&
+                    lvefFilter === 'all' &&
                     patientIdFilter.trim() === '' &&
                     patientNameFilter.trim() === ''
                   }
