@@ -1,0 +1,373 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "AISAP Studies API",
+    "version": "1.0.0",
+    "description": "HTTP API for the echocardiography studies demo app. Data is served from a file-backed mock store under `/api/studies`.\n\n**Capabilities**\n- List study summaries and fetch full study records by id.\n- Update review workflow status (`pending` → `reviewed`) via PATCH.\n- Load a combined **studies + overview** payload for dashboards (`/api/summary`).\n\n**Conventions**\n- JSON request and response bodies.\n- Study identifiers are opaque strings matching records in the mock dataset.\n- `PATCH` bodies must include `{ \"status\": \"pending\" | \"reviewed\" }`."
+  },
+  "servers": [
+    {
+      "url": "/",
+      "description": "Same origin as the Next.js app (e.g. http://localhost:3000 in development)"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Studies",
+      "description": "CRUD-style access to individual studies and list views."
+    },
+    {
+      "name": "Summary",
+      "description": "Aggregated statistics and study list for reporting views."
+    }
+  ],
+  "paths": {
+    "/api/studies": {
+      "get": {
+        "tags": ["Studies"],
+        "summary": "List study summaries",
+        "description": "Returns a lightweight array of studies (no `thumbnailUrl`), suitable for tables and filters.",
+        "operationId": "listStudySummaries",
+        "responses": {
+          "200": {
+            "description": "Array of study summaries",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/StudySummary" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/studies/{id}": {
+      "get": {
+        "tags": ["Studies"],
+        "summary": "Get study by id",
+        "description": "Returns the full study record including `thumbnailUrl`. Responds with 404 if the id is unknown.",
+        "operationId": "getStudyById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Study identifier"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Full study",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Study" }
+              }
+            }
+          },
+          "404": {
+            "description": "Study not found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" },
+                "example": { "error": "Study not found" }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Studies"],
+        "summary": "Update study status",
+        "description": "Sets the workflow status for a study. Body must be JSON with a `status` field equal to `pending` or `reviewed`.",
+        "operationId": "patchStudyStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Study identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/StudyStatusPatch" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated study",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Study" }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid JSON, body shape, or status value",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Study not found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/studies/selected/{id}": {
+      "get": {
+        "tags": ["Studies"],
+        "summary": "Get selected study (alias)",
+        "description": "Same response as `GET /api/studies/{id}` — full study for detail/selection flows.",
+        "operationId": "getSelectedStudy",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Study identifier"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Full study",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Study" }
+              }
+            }
+          },
+          "404": {
+            "description": "Study not found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Studies"],
+        "summary": "Update selected study status (alias)",
+        "description": "Same behavior as `PATCH /api/studies/{id}`.",
+        "operationId": "patchSelectedStudyStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Study identifier"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/StudyStatusPatch" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated study",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Study" }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Study not found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/summary": {
+      "get": {
+        "tags": ["Summary"],
+        "summary": "Studies list with overview aggregates",
+        "description": "Returns all study summaries plus rollups: counts by status and indication, LVEF statistics, and study date range. Implemented over the mock JSON dataset (same source file as the store).",
+        "operationId": "getStudiesSummary",
+        "responses": {
+          "200": {
+            "description": "Summaries and overview",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/StudiesSummaryResponse" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "StudyStatus": {
+        "type": "string",
+        "enum": ["pending", "reviewed"],
+        "description": "Review workflow state"
+      },
+      "StudyIndication": {
+        "type": "string",
+        "description": "Clinical indication label",
+        "enum": [
+          "Syncope",
+          "Hypertension",
+          "Pre-op evaluation",
+          "Cardiomyopathy",
+          "Chest pain",
+          "Post-MI assessment",
+          "Arrhythmia",
+          "Palpitations",
+          "Follow-up",
+          "Valve disease",
+          "Shortness of breath"
+        ]
+      },
+      "StudySummary": {
+        "type": "object",
+        "required": [
+          "id",
+          "patientName",
+          "patientId",
+          "studyDate",
+          "indication",
+          "lvef",
+          "status"
+        ],
+        "properties": {
+          "id": { "type": "string" },
+          "patientName": { "type": "string" },
+          "patientId": { "type": "string" },
+          "studyDate": { "type": "string", "format": "date" },
+          "indication": { "$ref": "#/components/schemas/StudyIndication" },
+          "lvef": { "type": "number" },
+          "status": { "$ref": "#/components/schemas/StudyStatus" }
+        }
+      },
+      "Study": {
+        "allOf": [
+          { "$ref": "#/components/schemas/StudySummary" },
+          {
+            "type": "object",
+            "required": ["thumbnailUrl"],
+            "properties": {
+              "thumbnailUrl": {
+                "type": "string",
+                "format": "uri",
+                "description": "Placeholder image URL for the study"
+              }
+            }
+          }
+        ]
+      },
+      "StudyStatusPatch": {
+        "type": "object",
+        "required": ["status"],
+        "properties": {
+          "status": { "$ref": "#/components/schemas/StudyStatus" }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": ["error"],
+        "properties": {
+          "error": { "type": "string" }
+        }
+      },
+      "IndicationSummary": {
+        "type": "object",
+        "required": ["indication", "count", "avgLvef"],
+        "properties": {
+          "indication": { "type": "string" },
+          "count": { "type": "integer", "minimum": 0 },
+          "avgLvef": {
+            "type": ["number", "null"],
+            "description": "Average LVEF for studies with numeric lvef under this indication"
+          }
+        }
+      },
+      "StudiesOverview": {
+        "type": "object",
+        "required": [
+          "totalStudies",
+          "statusCounts",
+          "indicationCounts",
+          "indicationSummaries",
+          "avgLvef",
+          "lvefMin",
+          "lvefMax",
+          "dateRange"
+        ],
+        "properties": {
+          "totalStudies": { "type": "integer", "minimum": 0 },
+          "statusCounts": {
+            "type": "object",
+            "additionalProperties": { "type": "integer" }
+          },
+          "indicationCounts": {
+            "type": "object",
+            "additionalProperties": { "type": "integer" }
+          },
+          "indicationSummaries": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/IndicationSummary" }
+          },
+          "avgLvef": { "type": ["number", "null"] },
+          "lvefMin": { "type": ["number", "null"] },
+          "lvefMax": { "type": ["number", "null"] },
+          "dateRange": {
+            "type": "object",
+            "required": ["earliest", "latest"],
+            "properties": {
+              "earliest": { "type": ["string", "null"], "format": "date" },
+              "latest": { "type": ["string", "null"], "format": "date" }
+            }
+          }
+        }
+      },
+      "StudiesSummaryResponse": {
+        "type": "object",
+        "required": ["studies", "overview"],
+        "properties": {
+          "studies": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/StudySummary" }
+          },
+          "overview": { "$ref": "#/components/schemas/StudiesOverview" }
+        }
+      }
+    }
+  }
+}
