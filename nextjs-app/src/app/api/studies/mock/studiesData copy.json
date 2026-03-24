@@ -1,0 +1,1002 @@
+[
+  {
+    "id": "1",
+    "patientName": "Amelia Haddad",
+    "patientId": "P-97922",
+    "studyDate": "2025-12-22",
+    "indication": "Syncope",
+    "lvef": 67,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-001-97922/150/150"
+  },
+  {
+    "id": "2",
+    "patientName": "Charlotte Katz",
+    "patientId": "P-41965",
+    "studyDate": "2024-11-05",
+    "indication": "Hypertension",
+    "lvef": 34,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-002-41965/150/150"
+  },
+  {
+    "id": "3",
+    "patientName": "Benjamin Barak",
+    "patientId": "P-43483",
+    "studyDate": "2023-08-07",
+    "indication": "Pre-op evaluation",
+    "lvef": 44,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-003-43483/150/150"
+  },
+  {
+    "id": "4",
+    "patientName": "Michael Cohen",
+    "patientId": "P-35418",
+    "studyDate": "2025-04-28",
+    "indication": "Cardiomyopathy",
+    "lvef": 47,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-004-35418/150/150"
+  },
+  {
+    "id": "5",
+    "patientName": "William Stern",
+    "patientId": "P-22628",
+    "studyDate": "2017-01-06",
+    "indication": "Chest pain",
+    "lvef": 75,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-005-22628/150/150"
+  },
+  {
+    "id": "6",
+    "patientName": "Harper Mizrahi",
+    "patientId": "P-71226",
+    "studyDate": "2020-10-14",
+    "indication": "Post-MI assessment",
+    "lvef": 67,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-006-71226/150/150"
+  },
+  {
+    "id": "7",
+    "patientName": "Liam Dayan",
+    "patientId": "P-93590",
+    "studyDate": "2026-09-09",
+    "indication": "Arrhythmia",
+    "lvef": 42,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-007-93590/150/150"
+  },
+  {
+    "id": "8",
+    "patientName": "William Stern",
+    "patientId": "P-34313",
+    "studyDate": "2017-07-05",
+    "indication": "Syncope",
+    "lvef": 55,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-008-34313/150/150"
+  },
+  {
+    "id": "9",
+    "patientName": "Henry Friedman",
+    "patientId": "P-96682",
+    "studyDate": "2024-09-11",
+    "indication": "Chest pain",
+    "lvef": 37,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-009-96682/150/150"
+  },
+  {
+    "id": "10",
+    "patientName": "Ethan Barak",
+    "patientId": "P-46205",
+    "studyDate": "2026-09-01",
+    "indication": "Arrhythmia",
+    "lvef": 70,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-010-46205/150/150"
+  },
+  {
+    "id": "11",
+    "patientName": "Tamar Sharabi",
+    "patientId": "P-25153",
+    "studyDate": "2018-06-11",
+    "indication": "Arrhythmia",
+    "lvef": 75,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-011-25153/150/150"
+  },
+  {
+    "id": "12",
+    "patientName": "Yonatan Ben-David",
+    "patientId": "P-98677",
+    "studyDate": "2016-12-11",
+    "indication": "Cardiomyopathy",
+    "lvef": 39,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-012-98677/150/150"
+  },
+  {
+    "id": "13",
+    "patientName": "Michael Haddad",
+    "patientId": "P-22414",
+    "studyDate": "2016-06-03",
+    "indication": "Hypertension",
+    "lvef": 51,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-013-22414/150/150"
+  },
+  {
+    "id": "14",
+    "patientName": "Leah Sharabi",
+    "patientId": "P-40868",
+    "studyDate": "2025-08-07",
+    "indication": "Arrhythmia",
+    "lvef": 51,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-014-40868/150/150"
+  },
+  {
+    "id": "15",
+    "patientName": "Yonatan Navon",
+    "patientId": "P-92441",
+    "studyDate": "2019-10-10",
+    "indication": "Palpitations",
+    "lvef": 65,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-015-92441/150/150"
+  },
+  {
+    "id": "16",
+    "patientName": "Sophia Dayan",
+    "patientId": "P-53473",
+    "studyDate": "2021-04-01",
+    "indication": "Follow-up",
+    "lvef": 52,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-016-53473/150/150"
+  },
+  {
+    "id": "17",
+    "patientName": "Noah Barak",
+    "patientId": "P-12964",
+    "studyDate": "2018-05-20",
+    "indication": "Hypertension",
+    "lvef": 44,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-017-12964/150/150"
+  },
+  {
+    "id": "18",
+    "patientName": "Charlotte Dahan",
+    "patientId": "P-89592",
+    "studyDate": "2017-03-08",
+    "indication": "Follow-up",
+    "lvef": 72,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-018-89592/150/150"
+  },
+  {
+    "id": "19",
+    "patientName": "Ava Barak",
+    "patientId": "P-62926",
+    "studyDate": "2022-07-08",
+    "indication": "Pre-op evaluation",
+    "lvef": 56,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-019-62926/150/150"
+  },
+  {
+    "id": "20",
+    "patientName": "Leah Rosen",
+    "patientId": "P-17040",
+    "studyDate": "2016-10-22",
+    "indication": "Valve disease",
+    "lvef": 48,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-020-17040/150/150"
+  },
+  {
+    "id": "21",
+    "patientName": "William Dayan",
+    "patientId": "P-16419",
+    "studyDate": "2022-05-23",
+    "indication": "Pre-op evaluation",
+    "lvef": 65,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-021-16419/150/150"
+  },
+  {
+    "id": "22",
+    "patientName": "Olivia Levi",
+    "patientId": "P-75234",
+    "studyDate": "2019-11-15",
+    "indication": "Valve disease",
+    "lvef": 55,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-022-75234/150/150"
+  },
+  {
+    "id": "23",
+    "patientName": "Liam Haddad",
+    "patientId": "P-56905",
+    "studyDate": "2024-09-13",
+    "indication": "Palpitations",
+    "lvef": 40,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-023-56905/150/150"
+  },
+  {
+    "id": "24",
+    "patientName": "Ava Levi",
+    "patientId": "P-62226",
+    "studyDate": "2016-03-25",
+    "indication": "Chest pain",
+    "lvef": 70,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-024-62226/150/150"
+  },
+  {
+    "id": "25",
+    "patientName": "Sarah Levi",
+    "patientId": "P-92194",
+    "studyDate": "2017-08-03",
+    "indication": "Palpitations",
+    "lvef": 47,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-025-92194/150/150"
+  },
+  {
+    "id": "26",
+    "patientName": "Sarah Rosen",
+    "patientId": "P-2828",
+    "studyDate": "2026-04-23",
+    "indication": "Hypertension",
+    "lvef": 49,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-026-2828/150/150"
+  },
+  {
+    "id": "27",
+    "patientName": "David Adler",
+    "patientId": "P-69874",
+    "studyDate": "2022-03-10",
+    "indication": "Follow-up",
+    "lvef": 21,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-027-69874/150/150"
+  },
+  {
+    "id": "28",
+    "patientName": "Amelia Cohen",
+    "patientId": "P-17825",
+    "studyDate": "2017-12-07",
+    "indication": "Pre-op evaluation",
+    "lvef": 71,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-028-17825/150/150"
+  },
+  {
+    "id": "29",
+    "patientName": "Sarah Stern",
+    "patientId": "P-62971",
+    "studyDate": "2022-01-25",
+    "indication": "Cardiomyopathy",
+    "lvef": 30,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-029-62971/150/150"
+  },
+  {
+    "id": "30",
+    "patientName": "Ava Ben-David",
+    "patientId": "P-9923",
+    "studyDate": "2026-10-03",
+    "indication": "Follow-up",
+    "lvef": 56,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-030-9923/150/150"
+  },
+  {
+    "id": "31",
+    "patientName": "Leah Peretz",
+    "patientId": "P-9680",
+    "studyDate": "2023-09-13",
+    "indication": "Cardiomyopathy",
+    "lvef": 62,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-031-9680/150/150"
+  },
+  {
+    "id": "32",
+    "patientName": "David Levi",
+    "patientId": "P-50038",
+    "studyDate": "2026-08-18",
+    "indication": "Valve disease",
+    "lvef": 38,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-032-50038/150/150"
+  },
+  {
+    "id": "33",
+    "patientName": "Henry Katz",
+    "patientId": "P-85403",
+    "studyDate": "2022-07-21",
+    "indication": "Hypertension",
+    "lvef": 24,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-033-85403/150/150"
+  },
+  {
+    "id": "34",
+    "patientName": "Olivia Katz",
+    "patientId": "P-59750",
+    "studyDate": "2019-06-07",
+    "indication": "Shortness of breath",
+    "lvef": 52,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-034-59750/150/150"
+  },
+  {
+    "id": "35",
+    "patientName": "Benjamin Shalev",
+    "patientId": "P-27646",
+    "studyDate": "2019-04-23",
+    "indication": "Palpitations",
+    "lvef": 35,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-035-27646/150/150"
+  },
+  {
+    "id": "36",
+    "patientName": "James Adler",
+    "patientId": "P-44558",
+    "studyDate": "2026-01-14",
+    "indication": "Palpitations",
+    "lvef": 28,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-036-44558/150/150"
+  },
+  {
+    "id": "37",
+    "patientName": "Charlotte Cohen",
+    "patientId": "P-41869",
+    "studyDate": "2019-03-15",
+    "indication": "Hypertension",
+    "lvef": 59,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-037-41869/150/150"
+  },
+  {
+    "id": "38",
+    "patientName": "Alexander Peretz",
+    "patientId": "P-64383",
+    "studyDate": "2018-11-22",
+    "indication": "Valve disease",
+    "lvef": 56,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-038-64383/150/150"
+  },
+  {
+    "id": "39",
+    "patientName": "Maya Rosen",
+    "patientId": "P-47785",
+    "studyDate": "2022-09-19",
+    "indication": "Syncope",
+    "lvef": 71,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-039-47785/150/150"
+  },
+  {
+    "id": "40",
+    "patientName": "Elijah Biton",
+    "patientId": "P-20275",
+    "studyDate": "2026-02-20",
+    "indication": "Post-MI assessment",
+    "lvef": 33,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-040-20275/150/150"
+  },
+  {
+    "id": "41",
+    "patientName": "Ava Greenberg",
+    "patientId": "P-50588",
+    "studyDate": "2025-08-13",
+    "indication": "Valve disease",
+    "lvef": 45,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-041-50588/150/150"
+  },
+  {
+    "id": "42",
+    "patientName": "Sarah Cohen",
+    "patientId": "P-89028",
+    "studyDate": "2018-09-07",
+    "indication": "Arrhythmia",
+    "lvef": 67,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-042-89028/150/150"
+  },
+  {
+    "id": "43",
+    "patientName": "Ethan Peretz",
+    "patientId": "P-23819",
+    "studyDate": "2023-06-11",
+    "indication": "Arrhythmia",
+    "lvef": 66,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-043-23819/150/150"
+  },
+  {
+    "id": "44",
+    "patientName": "Tamar Mizrahi",
+    "patientId": "P-74861",
+    "studyDate": "2019-08-15",
+    "indication": "Arrhythmia",
+    "lvef": 42,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-044-74861/150/150"
+  },
+  {
+    "id": "45",
+    "patientName": "Leah Dahan",
+    "patientId": "P-22555",
+    "studyDate": "2018-06-30",
+    "indication": "Cardiomyopathy",
+    "lvef": 34,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-045-22555/150/150"
+  },
+  {
+    "id": "46",
+    "patientName": "Liam Stern",
+    "patientId": "P-76158",
+    "studyDate": "2016-02-12",
+    "indication": "Palpitations",
+    "lvef": 30,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-046-76158/150/150"
+  },
+  {
+    "id": "47",
+    "patientName": "Isabella Levi",
+    "patientId": "P-52566",
+    "studyDate": "2025-08-16",
+    "indication": "Follow-up",
+    "lvef": 43,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-047-52566/150/150"
+  },
+  {
+    "id": "48",
+    "patientName": "Michael Biton",
+    "patientId": "P-86370",
+    "studyDate": "2023-02-09",
+    "indication": "Follow-up",
+    "lvef": 68,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-048-86370/150/150"
+  },
+  {
+    "id": "49",
+    "patientName": "Rachel Stern",
+    "patientId": "P-77795",
+    "studyDate": "2017-10-13",
+    "indication": "Palpitations",
+    "lvef": 60,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-049-77795/150/150"
+  },
+  {
+    "id": "50",
+    "patientName": "Isabella Dayan",
+    "patientId": "P-11005",
+    "studyDate": "2019-12-27",
+    "indication": "Follow-up",
+    "lvef": 56,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-050-11005/150/150"
+  },
+  {
+    "id": "51",
+    "patientName": "Emma Dayan",
+    "patientId": "P-11869",
+    "studyDate": "2021-01-06",
+    "indication": "Pre-op evaluation",
+    "lvef": 24,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-051-11869/150/150"
+  },
+  {
+    "id": "52",
+    "patientName": "Sarah Dayan",
+    "patientId": "P-43726",
+    "studyDate": "2019-01-12",
+    "indication": "Syncope",
+    "lvef": 35,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-052-43726/150/150"
+  },
+  {
+    "id": "53",
+    "patientName": "James Stern",
+    "patientId": "P-78248",
+    "studyDate": "2024-01-03",
+    "indication": "Shortness of breath",
+    "lvef": 34,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-053-78248/150/150"
+  },
+  {
+    "id": "54",
+    "patientName": "William Levi",
+    "patientId": "P-76117",
+    "studyDate": "2021-06-07",
+    "indication": "Pre-op evaluation",
+    "lvef": 48,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-054-76117/150/150"
+  },
+  {
+    "id": "55",
+    "patientName": "William Adler",
+    "patientId": "P-69184",
+    "studyDate": "2020-09-28",
+    "indication": "Shortness of breath",
+    "lvef": 27,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-055-69184/150/150"
+  },
+  {
+    "id": "56",
+    "patientName": "Evelyn Stern",
+    "patientId": "P-24213",
+    "studyDate": "2017-06-30",
+    "indication": "Arrhythmia",
+    "lvef": 43,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-056-24213/150/150"
+  },
+  {
+    "id": "57",
+    "patientName": "Rachel Adler",
+    "patientId": "P-36775",
+    "studyDate": "2022-10-20",
+    "indication": "Syncope",
+    "lvef": 21,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-057-36775/150/150"
+  },
+  {
+    "id": "58",
+    "patientName": "Henry Shalev",
+    "patientId": "P-73910",
+    "studyDate": "2021-03-28",
+    "indication": "Post-MI assessment",
+    "lvef": 43,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-058-73910/150/150"
+  },
+  {
+    "id": "59",
+    "patientName": "Harper Ben-David",
+    "patientId": "P-60927",
+    "studyDate": "2026-04-05",
+    "indication": "Hypertension",
+    "lvef": 36,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-059-60927/150/150"
+  },
+  {
+    "id": "60",
+    "patientName": "James Biton",
+    "patientId": "P-68480",
+    "studyDate": "2022-09-05",
+    "indication": "Palpitations",
+    "lvef": 70,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-060-68480/150/150"
+  },
+  {
+    "id": "61",
+    "patientName": "David Dayan",
+    "patientId": "P-35086",
+    "studyDate": "2017-07-31",
+    "indication": "Syncope",
+    "lvef": 26,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-061-35086/150/150"
+  },
+  {
+    "id": "62",
+    "patientName": "Noah Haddad",
+    "patientId": "P-35135",
+    "studyDate": "2019-12-17",
+    "indication": "Shortness of breath",
+    "lvef": 67,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-062-35135/150/150"
+  },
+  {
+    "id": "63",
+    "patientName": "Evelyn Shalev",
+    "patientId": "P-65760",
+    "studyDate": "2016-04-07",
+    "indication": "Valve disease",
+    "lvef": 22,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-063-65760/150/150"
+  },
+  {
+    "id": "64",
+    "patientName": "Evelyn Cohen",
+    "patientId": "P-75396",
+    "studyDate": "2019-02-14",
+    "indication": "Pre-op evaluation",
+    "lvef": 55,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-064-75396/150/150"
+  },
+  {
+    "id": "65",
+    "patientName": "Benjamin Mizrahi",
+    "patientId": "P-17204",
+    "studyDate": "2020-10-04",
+    "indication": "Shortness of breath",
+    "lvef": 36,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-065-17204/150/150"
+  },
+  {
+    "id": "66",
+    "patientName": "Elijah Haddad",
+    "patientId": "P-94439",
+    "studyDate": "2020-09-15",
+    "indication": "Pre-op evaluation",
+    "lvef": 57,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-066-94439/150/150"
+  },
+  {
+    "id": "67",
+    "patientName": "Mia Barak",
+    "patientId": "P-65524",
+    "studyDate": "2024-10-19",
+    "indication": "Follow-up",
+    "lvef": 48,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-067-65524/150/150"
+  },
+  {
+    "id": "68",
+    "patientName": "Sarah Biton",
+    "patientId": "P-45952",
+    "studyDate": "2017-11-11",
+    "indication": "Arrhythmia",
+    "lvef": 34,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-068-45952/150/150"
+  },
+  {
+    "id": "69",
+    "patientName": "Oliver Adler",
+    "patientId": "P-61454",
+    "studyDate": "2018-01-11",
+    "indication": "Valve disease",
+    "lvef": 38,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-069-61454/150/150"
+  },
+  {
+    "id": "70",
+    "patientName": "Emma Adler",
+    "patientId": "P-42893",
+    "studyDate": "2026-02-09",
+    "indication": "Hypertension",
+    "lvef": 27,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-070-42893/150/150"
+  },
+  {
+    "id": "71",
+    "patientName": "Yonatan Peretz",
+    "patientId": "P-97158",
+    "studyDate": "2023-05-14",
+    "indication": "Valve disease",
+    "lvef": 43,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-071-97158/150/150"
+  },
+  {
+    "id": "72",
+    "patientName": "James Adler",
+    "patientId": "P-17627",
+    "studyDate": "2024-10-09",
+    "indication": "Post-MI assessment",
+    "lvef": 35,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-072-17627/150/150"
+  },
+  {
+    "id": "73",
+    "patientName": "James Azoulay",
+    "patientId": "P-12427",
+    "studyDate": "2020-01-07",
+    "indication": "Follow-up",
+    "lvef": 59,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-073-12427/150/150"
+  },
+  {
+    "id": "74",
+    "patientName": "Lucas Haddad",
+    "patientId": "P-93327",
+    "studyDate": "2020-07-19",
+    "indication": "Valve disease",
+    "lvef": 48,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-074-93327/150/150"
+  },
+  {
+    "id": "75",
+    "patientName": "Mia Cohen",
+    "patientId": "P-94063",
+    "studyDate": "2021-09-22",
+    "indication": "Shortness of breath",
+    "lvef": 68,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-075-94063/150/150"
+  },
+  {
+    "id": "76",
+    "patientName": "Leah Adler",
+    "patientId": "P-64850",
+    "studyDate": "2021-05-10",
+    "indication": "Syncope",
+    "lvef": 44,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-076-64850/150/150"
+  },
+  {
+    "id": "77",
+    "patientName": "David Azoulay",
+    "patientId": "P-79641",
+    "studyDate": "2019-05-17",
+    "indication": "Valve disease",
+    "lvef": 35,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-077-79641/150/150"
+  },
+  {
+    "id": "78",
+    "patientName": "Elijah Dayan",
+    "patientId": "P-89465",
+    "studyDate": "2025-02-17",
+    "indication": "Pre-op evaluation",
+    "lvef": 39,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-078-89465/150/150"
+  },
+  {
+    "id": "79",
+    "patientName": "Henry Haddad",
+    "patientId": "P-58827",
+    "studyDate": "2017-03-01",
+    "indication": "Follow-up",
+    "lvef": 51,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-079-58827/150/150"
+  },
+  {
+    "id": "80",
+    "patientName": "Alexander Sharabi",
+    "patientId": "P-54613",
+    "studyDate": "2020-07-12",
+    "indication": "Syncope",
+    "lvef": 38,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-080-54613/150/150"
+  },
+  {
+    "id": "81",
+    "patientName": "Yonatan Dahan",
+    "patientId": "P-40976",
+    "studyDate": "2020-07-17",
+    "indication": "Arrhythmia",
+    "lvef": 31,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-081-40976/150/150"
+  },
+  {
+    "id": "82",
+    "patientName": "Lucas Dayan",
+    "patientId": "P-85489",
+    "studyDate": "2020-12-29",
+    "indication": "Hypertension",
+    "lvef": 59,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-082-85489/150/150"
+  },
+  {
+    "id": "83",
+    "patientName": "Elijah Friedman",
+    "patientId": "P-78079",
+    "studyDate": "2018-03-24",
+    "indication": "Hypertension",
+    "lvef": 51,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-083-78079/150/150"
+  },
+  {
+    "id": "84",
+    "patientName": "Liam Ben-David",
+    "patientId": "P-41347",
+    "studyDate": "2019-02-08",
+    "indication": "Hypertension",
+    "lvef": 34,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-084-41347/150/150"
+  },
+  {
+    "id": "85",
+    "patientName": "Mia Cohen",
+    "patientId": "P-71275",
+    "studyDate": "2023-03-06",
+    "indication": "Syncope",
+    "lvef": 32,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-085-71275/150/150"
+  },
+  {
+    "id": "86",
+    "patientName": "William Navon",
+    "patientId": "P-83893",
+    "studyDate": "2019-10-25",
+    "indication": "Arrhythmia",
+    "lvef": 44,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-086-83893/150/150"
+  },
+  {
+    "id": "87",
+    "patientName": "Leah Ben-David",
+    "patientId": "P-89401",
+    "studyDate": "2022-05-16",
+    "indication": "Chest pain",
+    "lvef": 52,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-087-89401/150/150"
+  },
+  {
+    "id": "88",
+    "patientName": "Tamar Mizrahi",
+    "patientId": "P-75617",
+    "studyDate": "2020-12-19",
+    "indication": "Hypertension",
+    "lvef": 38,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-088-75617/150/150"
+  },
+  {
+    "id": "89",
+    "patientName": "David Dayan",
+    "patientId": "P-26655",
+    "studyDate": "2026-08-19",
+    "indication": "Syncope",
+    "lvef": 64,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-089-26655/150/150"
+  },
+  {
+    "id": "90",
+    "patientName": "Maya Azoulay",
+    "patientId": "P-87038",
+    "studyDate": "2017-02-13",
+    "indication": "Shortness of breath",
+    "lvef": 38,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-090-87038/150/150"
+  },
+  {
+    "id": "91",
+    "patientName": "Elijah Dahan",
+    "patientId": "P-59635",
+    "studyDate": "2026-01-13",
+    "indication": "Post-MI assessment",
+    "lvef": 60,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-091-59635/150/150"
+  },
+  {
+    "id": "92",
+    "patientName": "Sarah Rosen",
+    "patientId": "P-89668",
+    "studyDate": "2024-01-26",
+    "indication": "Follow-up",
+    "lvef": 72,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-092-89668/150/150"
+  },
+  {
+    "id": "93",
+    "patientName": "William Shalev",
+    "patientId": "P-73103",
+    "studyDate": "2017-03-28",
+    "indication": "Follow-up",
+    "lvef": 51,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-093-73103/150/150"
+  },
+  {
+    "id": "94",
+    "patientName": "Ethan Cohen",
+    "patientId": "P-32328",
+    "studyDate": "2022-12-02",
+    "indication": "Valve disease",
+    "lvef": 28,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-094-32328/150/150"
+  },
+  {
+    "id": "95",
+    "patientName": "Ethan Cohen",
+    "patientId": "P-1617",
+    "studyDate": "2021-04-15",
+    "indication": "Syncope",
+    "lvef": 54,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-095-1617/150/150"
+  },
+  {
+    "id": "96",
+    "patientName": "Charlotte Dayan",
+    "patientId": "P-39093",
+    "studyDate": "2018-09-10",
+    "indication": "Follow-up",
+    "lvef": 49,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-096-39093/150/150"
+  },
+  {
+    "id": "97",
+    "patientName": "Leah Mizrahi",
+    "patientId": "P-25477",
+    "studyDate": "2025-01-23",
+    "indication": "Shortness of breath",
+    "lvef": 37,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-097-25477/150/150"
+  },
+  {
+    "id": "98",
+    "patientName": "Leah Greenberg",
+    "patientId": "P-57430",
+    "studyDate": "2020-10-29",
+    "indication": "Syncope",
+    "lvef": 57,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-098-57430/150/150"
+  },
+  {
+    "id": "99",
+    "patientName": "Daniel Haddad",
+    "patientId": "P-57099",
+    "studyDate": "2022-01-07",
+    "indication": "Pre-op evaluation",
+    "lvef": 56,
+    "status": "pending",
+    "thumbnailUrl": "https://picsum.photos/seed/study-099-57099/150/150"
+  },
+  {
+    "id": "100",
+    "patientName": "Oliver Katz",
+    "patientId": "P-82756",
+    "studyDate": "2016-01-31",
+    "indication": "Cardiomyopathy",
+    "lvef": 54,
+    "status": "reviewed",
+    "thumbnailUrl": "https://picsum.photos/seed/study-100-82756/150/150"
+  }
+]

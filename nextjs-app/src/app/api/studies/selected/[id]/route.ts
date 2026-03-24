@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { StudyStatus } from "@/types/Study";
 import type { Study, StudyStatus as StudyStatusType } from "@/types/Study";
 
-import { updateStudyStatusById, loadStudies } from "../../studiesStore";
+import { updateStudyStatusById, loadStudies, StudiesStoreError } from "../../studiesStore";
 
 type StudyDetailResponse = Study | { error: string };
 
@@ -11,7 +11,15 @@ export async function GET(
   _req: Request,
   { params }: { params: { id: string } },
 ): Promise<NextResponse<StudyDetailResponse>> {
-  const studies = await loadStudies();
+  let studies: Study[];
+  try {
+    studies = await loadStudies();
+  } catch (error) {
+    if (error instanceof StudiesStoreError) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    throw error;
+  }
   const study = studies.find((s) => s.id === params.id);
 
   if (!study) {
@@ -48,7 +56,15 @@ export async function PATCH(
     return NextResponse.json({ error: "Invalid study status" }, { status: 400 });
   }
 
-  const updated = await updateStudyStatusById(params.id, status);
+  let updated: Study | null;
+  try {
+    updated = await updateStudyStatusById(params.id, status);
+  } catch (error) {
+    if (error instanceof StudiesStoreError) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    throw error;
+  }
   if (!updated) {
     return NextResponse.json({ error: "Study not found" }, { status: 404 });
   }

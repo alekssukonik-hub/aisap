@@ -9,14 +9,37 @@ const STUDIES_DATA_PATH = path.join(
   "./mock/studiesData.json"
 );
 
+export class StudiesStoreError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "StudiesStoreError";
+  }
+}
+
 async function parseStudies(json: string): Promise<Study[]> {
-  const parsed = JSON.parse(json) as unknown;
-  return parsed as Study[];
+  try {
+    const parsed = JSON.parse(json) as unknown;
+    return parsed as Study[];
+  } catch {
+    throw new StudiesStoreError("Mock studies file was corrupted");
+  }
 }
 
 export async function loadStudies(): Promise<Study[]> {
-  const raw = await readFile(STUDIES_DATA_PATH, "utf8");
-  return parseStudies(raw);
+  try {
+    const raw = await readFile(STUDIES_DATA_PATH, "utf8");
+    return parseStudies(raw);
+  } catch (error) {
+    if (error instanceof StudiesStoreError) {
+      throw error;
+    }
+
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+      throw new StudiesStoreError("Mock studies file was corrupted");
+    }
+
+    throw error;
+  }
 }
 
 export async function saveStudies(studies: Study[]): Promise<void> {
