@@ -122,6 +122,14 @@ docker build -t aisap-web -f nextjs-app/Dockerfile nextjs-app
 docker run -p 3000:3000 aisap-web
 ```
 
+## Emulation errors
+
+You can emulate errors in mock data by:
+
+- Placing malformed data in the mock file.
+- Using an empty array.
+- Removing or renaming the file.
+
 ## TODO
 
 Tracked from inline `TODO` / `FIXME`-style comments in the codebase:
