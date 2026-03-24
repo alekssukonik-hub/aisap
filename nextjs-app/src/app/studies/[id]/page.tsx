@@ -71,7 +71,8 @@ function StudyDetailPageContent() {
   if (loading) {
     return (
       <main className="flex flex-1 items-center justify-center bg-zinc-50 px-4 py-16">
-        <p className="text-sm text-zinc-600">Loading study...</p>
+        {/* <p className="text-sm text-zinc-600">Loading study...</p> */}
+        <span className="loader"></span>
       </main>
     );
   }
@@ -229,7 +230,8 @@ export default function StudyDetailPage() {
     <Suspense
       fallback={
         <main className="flex flex-1 items-center justify-center bg-zinc-50 px-4 py-16">
-          <p className="text-sm text-zinc-600">Loading study...</p>
+          {/* <p className="text-sm text-zinc-600">Loading study...</p> */}
+          <span className="loader"></span>
         </main>
       }
     >

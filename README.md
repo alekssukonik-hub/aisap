@@ -10,7 +10,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 - **Studies list** — studies are shown in a filtered, sorted list.
 - **Study preview** — open a selected study for a detailed view; the back link returns you to the studies list with the same filters, sorting, and pagination as when you opened the study.
 
-Application code lives in this directory (`nextjs-app`). A `docker-compose.yml` file for running the app in containers lives in the **parent directory** (repository root).
+Application code lives in the `nextjs-app` directory. A `docker-compose.yml` file for running the app in containers lives in the repository root.
 
 ## Prerequisites
 
@@ -20,7 +20,7 @@ Application code lives in this directory (`nextjs-app`). A `docker-compose.yml` 
 
 ## Getting started (local, no Docker)
 
-From this directory (`nextjs-app`):
+From the `nextjs-app` directory:
 
 ```bash
 npm ci
@@ -46,11 +46,11 @@ Docker files:
 
 | File                 | Role                                      |
 | -------------------- | ----------------------------------------- |
-| `Dockerfile`         | Multi-stage production build (standalone) |
-| `Dockerfile.dev`     | Dev base image (Node 20 Alpine)           |
-| `../docker-compose.yml` | `web` (prod) and `dev` (hot reload)    |
+| `nextjs-app/Dockerfile`         | Multi-stage production build (standalone) |
+| `nextjs-app/Dockerfile.dev`     | Dev base image (Node 20 Alpine)           |
+| `docker-compose.yml` | `web` (prod) and `dev` (hot reload) |
 
-**Run all `docker compose` commands from the repository root** (the directory that contains `docker-compose.yml` and the `nextjs-app` folder), not from inside `nextjs-app`.
+**Run all `docker compose` commands from the repository root** (the directory that contains `docker-compose.yml` and the `nextjs-app` folder).
 
 ### Important: one service at a time
 
