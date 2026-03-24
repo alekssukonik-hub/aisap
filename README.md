@@ -4,6 +4,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 - **Sorting** — sort studies in the studies list.
 - **Patient ID filtering** — filter by patient ID to see studies for a specific patient.
+- **Development note** — I used AI to speed up building the base page and styling work, since styling usually takes a lot of time, even with Tailwind.
 
 ## Why this tech stack
 
