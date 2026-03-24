@@ -5,6 +5,31 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 - **Sorting** — sort studies in the studies list.
 - **Patient ID filtering** — filter by patient ID to see studies for a specific patient.
 
+## Why this tech stack
+
+- **React** — currently a fast and fairly reliable framework for building UI.
+- **Next.js** — the best fit for this task as a lightweight mini-backend, with a transparent structure that is easy to maintain.
+- **TypeScript** — provides type safety between backend and frontend code.
+- **Docker** — part of the task requirements and also useful for quick, consistent deployment.
+
+## State management approach
+
+This project intentionally uses a lightweight state management model without Redux/Zustand/React Query.
+
+- **Local UI state (`useState`)** in page components handles filters, sorting, pagination, loading/error flags, and status edit drafts.
+- **Derived state (`useMemo`)** computes filtered/sorted datasets and dynamic filter options.
+- **URL as a shareable state layer** keeps list state in query params (page, page size, filters, sorting), so navigation and deep links preserve user context.
+- **Session persistence** stores list preferences in `sessionStorage` to restore state during the same browser session.
+- **Server state via API calls** is handled with straightforward `fetch` helpers; after updates, UI state is updated directly for immediate feedback.
+- **Mock backend persistence** writes updates to the local JSON dataset through Next.js route handlers.
+
+### Why this choice
+
+- **Fits project scope:** most state is page-scoped, so a global store would add unnecessary complexity.
+- **Keeps dependencies minimal:** easier maintenance and lower cognitive overhead.
+- **Improves UX naturally:** URL-synced list state supports back navigation and shareable links.
+- **Easy to evolve:** if cross-page shared state or advanced caching/revalidation grows, adding a dedicated state/data library remains straightforward.
+
 ## Project structure
 
 - **Studies list** — studies are shown in a filtered, sorted list.
